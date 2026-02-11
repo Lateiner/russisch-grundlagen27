@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russisch Übung: Fehlersuche (Sofortiges Feedback)</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --neutral-btn: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 { text-align: center; color: var(--secondary-color); }
+
+        .exercise-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .exercise-header {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .error-item {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            transition: opacity 0.3s;
+        }
+        
+        .error-item:last-child { border-bottom: none; }
+
+        /* Wenn beantwortet, leicht ausgrauen */
+        .error-item.answered { opacity: 0.9; }
+
+        .sentence-box {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .decision-area {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--neutral-btn);
+            background-color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+            transition: all 0.2s;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Hover nur wenn noch nicht geklickt */
+        .error-item:not(.answered) .toggle-btn:hover {
+            border-color: #bbb;
+            background-color: #fcfcfc;
+            transform: translateY(-2px);
+        }
+
+        /* --- Feedback Zustände --- */
+
+        /* User hat richtig gewählt (Grün) */
+        .toggle-btn.correct-choice {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+            cursor: default;
+        }
+        
+        .toggle-btn.correct-choice::after {
+            content: "✓";
+            margin-left: 8px;
+            font-weight: bold;
+        }
+
+        /* User hat falsch gewählt (Rot) */
+        .toggle-btn.wrong-choice {
+            background-color: var(--error-color);
+            border-color: var(--error-color);
+            color: white;
+            cursor: default;
+            opacity: 0.8;
+        }
+        
+        .toggle-btn.wrong-choice::after {
+            content: "✗";
+            margin-left: 8px;
+            font-weight: bold;
+        }
+
+        /* Nicht gewählte Buttons deaktivieren */
+        .toggle-btn.disabled {
+            background-color: #f5f5f5;
+            border-color: #eee;
+            color: #ccc;
+            cursor: default;
+        }
+
+        /* Erklärung Box */
+        .explanation {
+            margin-top: 15px;
+            font-size: 0.95em;
+            padding: 12px;
+            border-radius: 5px;
+            display: none; /* Standardmäßig versteckt */
+        }
+        
+        /* Sichtbare Erklärung */
+        .explanation.visible { display: block; animation: fadeIn 0.5s; }
+        
+        .explanation.success-bg {
+            background-color: #e8f8f5;
+            border: 1px solid var(--success-color);
+            color: #1e8449;
+        }
+        
+        .explanation.error-bg {
+            background-color: #fdedec;
+            border: 1px solid var(--error-color);
+            color: #c0392b;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 500px) {
+            .decision-area { flex-direction: column; gap: 10px; }
+            .toggle-btn { width: 100%; box-sizing: border-box; }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button.action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            color: white;
+            min-width: 150px;
+        }
+
+        .btn-reset { background-color: #95a5a6; }
+        .btn-reset:hover { background-color: #7f8c8d; }
+
+        .btn-solve { background-color: #f39c12; }
+        .btn-solve:hover { background-color: #d35400; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Russisch Grammatik</h1>
+
+    <div class="exercise-card">
+        <div class="exercise-header">
+            Fehlersuche: Richtig oder Falsch?
+            <div style="font-size: 0.85em; font-weight: normal; margin-top: 5px; color: #555;">
+                Klicke auf deine Antwort. Du siehst sofort, ob du recht hast.
+            </div>
+        </div>
+
+        <div id="quiz-container">
+            <!-- 1 -->
+            <div class="error-item" data-answer="wrong">
+                <div class="sentence-box">1. Я люблю чай. <strong>Тоже</strong> я люблю кофе.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Korrekt! Das ist falsch. Gleiches Subjekt ("Ich") verlangt <strong>также</strong>. Zudem steht "тоже" fast nie am Satzanfang.</div>
+            </div>
+
+            <!-- 2 -->
+            <div class="error-item" data-answer="correct">
+                <div class="sentence-box">2. Иван спит. Мария <strong>тоже</strong> спит.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Genau! Das ist richtig. Hier werden zwei Personen (Ivan vs. Maria) verglichen, die das Gleiche tun.</div>
+            </div>
+
+            <!-- 3 -->
+            <div class="error-item" data-answer="wrong">
+                <div class="sentence-box">3. В меню есть суп, салат, <strong>тоже</strong> десерт.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Korrekt erkannt! Das ist falsch. Bei Aufzählungen (Listen) verwenden wir <strong>а также</strong> (sowie).</div>
+            </div>
+
+            <!-- 4 -->
+            <div class="error-item" data-answer="correct">
+                <div class="sentence-box">4. Она умная, <strong>а также</strong> красивая.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Stimmt! Das ist richtig. Ein Subjekt (Sie) hat mehrere Eigenschaften = <strong>а также</strong>.</div>
+            </div>
+
+            <!-- 5 -->
+            <div class="error-item" data-answer="wrong">
+                <div class="sentence-box">5. Ты студент? Я <strong>также</strong>.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Richtig, das sagt man so nicht. Die Standardantwort für "Ich auch" ist im Russischen immer <strong>Я тоже</strong>.</div>
+            </div>
+
+            <!-- 6 -->
+            <div class="error-item" data-answer="correct">
+                <div class="sentence-box">6. Я не знаю. Он <strong>тоже</strong> не знает.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Richtig! Vergleich zweier Personen (Ich vs. Er), auch bei Verneinung nutzen wir "тоже".</div>
+            </div>
+
+            <!-- 7 -->
+            <div class="error-item" data-answer="wrong">
+                <div class="sentence-box">7. Мы гуляли. <strong>Тоже</strong> мы ходили в кино.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Gut erkannt! Das ist falsch. Gleiches Subjekt (Wir) + Zusatzinformation ("außerdem") verlangt <strong>Также</strong>.</div>
+            </div>
+
+            <!-- 8 -->
+            <div class="error-item" data-answer="correct">
+                <div class="sentence-box">8. В Москве зима. В Минске <strong>тоже</strong> зима.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Richtig! Hier werden zwei Orte (Moskau vs. Minsk) verglichen, die Situation ist gleich.</div>
+            </div>
+
+            <!-- 9 -->
+            <div class="error-item" data-answer="wrong">
+                <div class="sentence-box">9. Он поэт, <strong>а тоже</strong> музыкант.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Korrekt, das ist falsch. Die Verbindung "а тоже" existiert so nicht. Es muss <strong>а также</strong> heißen.</div>
+            </div>
+
+            <!-- 10 -->
+            <div class="error-item" data-answer="correct">
+                <div class="sentence-box">10. Этот стол большой. Тот стол <strong>тоже</strong> большой.</div>
+                <div class="decision-area">
+                    <div class="toggle-btn" onclick="checkItem(this, 'correct')">Richtig</div>
+                    <div class="toggle-btn" onclick="checkItem(this, 'wrong')">Falsch</div>
+                </div>
+                <div class="explanation">Stimmt! Ein klassischer Vergleich zwischen zwei Objekten = <strong>тоже</strong>.</div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="action-btn btn-reset" onclick="resetAll()">Zurücksetzen</button>
+            <button class="action-btn btn-solve" onclick="solveAll()">Lösungen anzeigen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkItem(btn, userChoice) {
+        const item = btn.closest('.error-item');
+        
+        // Verhindern, dass man mehrmals klickt
+        if (item.classList.contains('answered')) return;
+        
+        item.classList.add('answered');
+        const correctAnswer = item.getAttribute('data-answer');
+        const explanation = item.querySelector('.explanation');
+        const buttons = item.querySelectorAll('.toggle-btn');
+        
+        // buttons[0] ist "Richtig", buttons[1] ist "Falsch"
+        const correctBtn = buttons[0].getAttribute('onclick').includes("'correct'") ? buttons[0] : buttons[1];
+        
+        if (userChoice === correctAnswer) {
+            // Der User hat RECHT (egal ob er "Richtig" oder "Falsch" geklickt hat)
+            btn.classList.add('correct-choice'); // Mach den geklickten Button grün
+            
+            // Erklärung styling
+            explanation.classList.add('visible', 'success-bg');
+            // Text anpassen für Klarheit
+            const originalText = explanation.textContent;
+            explanation.textContent = "✔ " + originalText;
+            
+        } else {
+            // Der User liegt FALSCH
+            btn.classList.add('wrong-choice'); // Mach den geklickten Button rot
+            
+            // Zeige, was richtig gewesen wäre (markiere den anderen Button leicht)
+            buttons.forEach(b => {
+                if(b !== btn) b.style.borderColor = 'var(--success-color)';
+            });
+
+            // Erklärung styling
+            explanation.classList.add('visible', 'error-bg');
+            const originalText = explanation.textContent;
+            explanation.textContent = "✘ Leider nicht korrekt. " + originalText;
+        }
+
+        // Andere Buttons deaktivieren
+        buttons.forEach(b => {
+            if (b !== btn) b.classList.add('disabled');
+        });
+    }
+
+    function resetAll() {
+        const items = document.querySelectorAll('.error-item');
+        items.forEach(item => {
+            item.classList.remove('answered');
+            
+            // Buttons reset
+            const buttons = item.querySelectorAll('.toggle-btn');
+            buttons.forEach(b => {
+                b.classList.remove('correct-choice', 'wrong-choice', 'disabled');
+                b.style.borderColor = ''; // Inline style reset
+            });
+
+            // Erklärung reset
+            const expl = item.querySelector('.explanation');
+            expl.classList.remove('visible', 'success-bg', 'error-bg');
+            // Text zurücksetzen (Hack: wir laden die Seite nicht neu, also entfernen wir die Checkmarks grob)
+            let txt = expl.textContent;
+            txt = txt.replace(/^✔ /, '').replace(/^✘ Leider nicht korrekt. /, '');
+            expl.textContent = txt;
+        });
+    }
+
+    function solveAll() {
+        // Erst resetten
+        resetAll();
+        
+        const items = document.querySelectorAll('.error-item');
+        items.forEach(item => {
+            const correctAnswer = item.getAttribute('data-answer');
+            const buttons = item.querySelectorAll('.toggle-btn');
+            
+            // Simuliere Klick auf das Richtige
+            if (correctAnswer === 'correct') {
+                checkItem(buttons[0], 'correct');
+            } else {
+                checkItem(buttons[1], 'wrong');
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
