@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russisch Übung: Satzverbindung (Live Feedback)</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --box-border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 { text-align: center; color: var(--secondary-color); }
+
+        .exercise-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .exercise-header {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .transform-item {
+            background-color: #fafafa;
+            border: 1px solid var(--box-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+            transition: box-shadow 0.3s;
+        }
+
+        .transform-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .source-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: stretch;
+        }
+
+        .sentence-box {
+            flex: 1;
+            background-color: white;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-color);
+            font-size: 0.95em;
+            color: #555;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .label {
+            font-size: 0.75em;
+            font-weight: bold;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .arrow-down {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1.5em;
+            margin: -10px 0 5px 0;
+            line-height: 1;
+        }
+
+        .result-sentence {
+            font-size: 1.15em;
+            font-weight: 500;
+            background-color: #eaf2f8;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #d6eaf8;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        select.combine-select {
+            font-size: 1em;
+            padding: 6px 10px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            color: #333;
+            margin: 0 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        select.combine-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Feedback States */
+        select.combine-select.correct {
+            border-color: var(--success-color);
+            color: var(--success-color);
+            background-color: #e8f8f5;
+        }
+
+        select.combine-select.wrong {
+            border-color: var(--error-color);
+            color: var(--error-color);
+            background-color: #fdedec;
+        }
+
+        .feedback-icon {
+            font-size: 1.2em;
+            margin-left: 5px;
+            display: none; /* Standardmäßig versteckt */
+        }
+        
+        .feedback-msg {
+            width: 100%;
+            font-size: 0.85em;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
+        @media (max-width: 600px) {
+            .source-container { flex-direction: column; }
+            .result-sentence { padding: 12px; }
+            select.combine-select { width: 100%; margin: 5px 0; }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button.action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            color: white;
+            min-width: 150px;
+        }
+
+        .btn-reset { background-color: #95a5a6; }
+        .btn-reset:hover { background-color: #7f8c8d; }
+
+        .btn-solve { background-color: #f39c12; }
+        .btn-solve:hover { background-color: #d35400; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Russisch Grammatik</h1>
+
+    <div class="exercise-card">
+        <div class="exercise-header">
+            Satzverbindung: Mach aus zwei Sätzen einen!
+            <div style="font-size: 0.85em; font-weight: normal; margin-top: 5px; color: #555;">
+                Wähle das Verbindungswort. Die Farbe zeigt dir sofort, ob es stimmt.
+            </div>
+        </div>
+
+        <!-- 1 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Антон — врач.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> Виктор — врач.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Антон — врач, и Виктор 
+                <select class="combine-select" data-correct="тоже" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                врач.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Я купил молоко.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> Я купил хлеб.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Я купил молоко, 
+                <select class="combine-select" data-correct="а также" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                хлеб.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Анна поёт.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> Анна танцует.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Анна поёт, 
+                <select class="combine-select" data-correct="а также" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                танцует.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> В парке гуляют дети.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> В саду гуляют дети.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                В саду 
+                <select class="combine-select" data-correct="тоже" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                гуляют дети.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Директор подписал документ.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> Директор позвонил клиенту.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Директор подписал документ, 
+                <select class="combine-select" data-correct="а также" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                позвонил клиенту.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Я не курю.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> Мой друг не курит.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Я не курю, и мой друг 
+                <select class="combine-select" data-correct="тоже" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                не курит.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Фильм был скучный.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> Фильм был длинный.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Фильм был скучный, 
+                <select class="combine-select" data-correct="а также" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                длинный.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Кошка спит.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> Собака спит.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Кошка спит, и собака 
+                <select class="combine-select" data-correct="тоже" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                спит.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Мы посетили музей.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> Мы посетили театр.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Мы посетили музей, 
+                <select class="combine-select" data-correct="а также" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                театр.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="transform-item">
+            <div class="source-container">
+                <div class="sentence-box"><span class="label">Satz A</span> Это важно.</div>
+                <div class="sentence-box"><span class="label">Satz B</span> То важно.</div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="result-sentence">
+                Это важно, и то 
+                <select class="combine-select" data-correct="тоже" onchange="checkImmediate(this)">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="а также">а также</option>
+                </select>
+                важно.
+                <span class="feedback-icon"></span>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="action-btn btn-reset" onclick="resetCombinations()">Zurücksetzen</button>
+            <button class="action-btn btn-solve" onclick="solveCombinations()">Lösungen anzeigen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkImmediate(selectElement) {
+        const userVal = selectElement.value;
+        const correctVal = selectElement.getAttribute('data-correct');
+        const parent = selectElement.parentElement;
+        const icon = parent.querySelector('.feedback-icon');
+
+        // Reset Styles
+        selectElement.classList.remove('correct', 'wrong');
+        icon.style.display = 'none';
+
+        // Wenn der User wieder "..." auswählt
+        if (userVal === "") {
+            return;
+        }
+
+        if (userVal === correctVal) {
+            selectElement.classList.add('correct');
+            icon.textContent = '✅';
+            icon.style.display = 'inline';
+            icon.style.color = 'var(--success-color)';
+        } else {
+            selectElement.classList.add('wrong');
+            icon.textContent = '❌';
+            icon.style.display = 'inline';
+            icon.style.color = 'var(--error-color)';
+        }
+    }
+
+    function resetCombinations() {
+        const selects = document.querySelectorAll('.combine-select');
+        selects.forEach(select => {
+            select.value = "";
+            select.classList.remove('correct', 'wrong');
+            const icon = select.parentElement.querySelector('.feedback-icon');
+            icon.style.display = 'none';
+        });
+    }
+
+    function solveCombinations() {
+        const selects = document.querySelectorAll('.combine-select');
+        selects.forEach(select => {
+            select.value = select.getAttribute('data-correct');
+            // Trigger check to show feedback styles
+            checkImmediate(select);
+        });
+    }
+</script>
+
+</body>
+</html>
