@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russisch Übung: Logische Reihe</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --tag-bg: #eef2f5;
+            --gap-color: #f39c12;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 { text-align: center; color: var(--secondary-color); }
+
+        .exercise-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .exercise-header {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        /* Logic Row Item */
+        .logic-item {
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .logic-item:last-child { border-bottom: none; }
+
+        /* Tag Container for the Series */
+        .series-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .word-tag {
+            background-color: var(--tag-bg);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #dcdcdc;
+            color: var(--secondary-color);
+        }
+
+        .punctuation {
+            font-weight: bold;
+            color: #999;
+            margin: 0 -5px; /* Pull commas closer */
+        }
+
+        .gap-tag {
+            background-color: #fff;
+            border: 2px dashed var(--gap-color);
+            padding: 6px 15px;
+            border-radius: 20px;
+            color: var(--gap-color);
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        /* States for Gap */
+        .gap-tag.filled-correct {
+            background-color: #e8f8f5;
+            border-color: var(--success-color);
+            color: var(--success-color);
+            border-style: solid;
+        }
+
+        .gap-tag.filled-wrong {
+            background-color: #fdedec;
+            border-color: var(--error-color);
+            color: var(--error-color);
+            border-style: solid;
+        }
+
+        /* Options Buttons */
+        .options-wrapper {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .choice-btn {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
+            background-color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s;
+            min-width: 80px;
+        }
+
+        .choice-btn:hover:not(.disabled) {
+            border-color: #bbb;
+            background-color: #f9f9f9;
+        }
+
+        /* Feedback Colors for Buttons */
+        .choice-btn.correct-btn {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .choice-btn.wrong-btn {
+            background-color: var(--error-color);
+            border-color: var(--error-color);
+            color: white;
+            opacity: 0.6;
+        }
+
+        .choice-btn.disabled {
+            cursor: default;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .options-wrapper {
+                flex-wrap: wrap; /* Buttons umbrechen auf kleinen Handys */
+            }
+            .choice-btn {
+                flex: 1; /* Volle Breite */
+            }
+        }
+
+        /* Footer Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button.action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            color: white;
+            min-width: 150px;
+        }
+
+        .btn-reset { background-color: #95a5a6; }
+        .btn-reset:hover { background-color: #7f8c8d; }
+
+        .btn-solve { background-color: #f39c12; }
+        .btn-solve:hover { background-color: #d35400; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Russisch Grammatik</h1>
+
+    <div class="exercise-card">
+        <div class="exercise-header">
+            Logische Reihe: Vervollständige die Liste
+            <div style="font-size: 0.85em; font-weight: normal; margin-top: 5px; color: #555;">
+                Was passt in die Lücke, um die Aufzählung abzuschließen ("sowie")?
+            </div>
+        </div>
+
+        <!-- 1. Städte -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Москва</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">Петербург</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">Казань</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 2. Essen -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Суп</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">салат</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">десерт</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 3. Berufe -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Врачи</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">учителя</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">инженеры</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 4. Verben -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Мы читали</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">писали</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">переводили</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 5. Möbel -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Столы</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">стулья</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">диваны</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 6. Farben -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Красный</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">синий</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">зелёный</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 7. Personen (Namen) -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Иван</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">Анна</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">Максим</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 8. Musik -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Рок</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">поп</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">джаз</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 9. Getränke -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Чай</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">кофе</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">сок</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <!-- 10. Fächer -->
+        <div class="logic-item" data-correct="а также">
+            <div class="series-container">
+                <span class="word-tag">Физика</span>
+                <span class="punctuation">,</span>
+                <span class="word-tag">химия</span>
+                <span class="punctuation">,</span>
+                <span class="gap-tag">?</span>
+                <span class="word-tag">биология</span>
+            </div>
+            <div class="options-wrapper">
+                <button class="choice-btn" onclick="checkLogic(this, 'тоже')">тоже</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'также')">также</button>
+                <button class="choice-btn" onclick="checkLogic(this, 'а также')">а также</button>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="action-btn btn-reset" onclick="resetLogic()">Zurücksetzen</button>
+            <button class="action-btn btn-solve" onclick="solveLogic()">Lösungen anzeigen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkLogic(btn, userValue) {
+        const item = btn.closest('.logic-item');
+        
+        // Verhindern, dass man mehrmals klickt
+        if (item.classList.contains('answered')) return;
+        
+        item.classList.add('answered');
+        const correctValue = item.getAttribute('data-correct');
+        const gap = item.querySelector('.gap-tag');
+        const buttons = item.querySelectorAll('.choice-btn');
+
+        // Gap Text füllen
+        gap.textContent = userValue;
+
+        if (userValue === correctValue) {
+            // Richtig
+            btn.classList.add('correct-btn');
+            gap.classList.add('filled-correct');
+        } else {
+            // Falsch
+            btn.classList.add('wrong-btn');
+            gap.classList.add('filled-wrong');
+            
+            // Richtigen Button anzeigen
+            buttons.forEach(b => {
+                if (b.textContent === correctValue) {
+                    b.style.borderColor = "var(--success-color)";
+                    b.style.borderWidth = "2px";
+                    b.style.color = "var(--success-color)";
+                    b.style.fontWeight = "bold";
+                }
+            });
+        }
+
+        // Andere Buttons deaktivieren
+        buttons.forEach(b => {
+            if (b !== btn) b.classList.add('disabled');
+        });
+    }
+
+    function resetLogic() {
+        const items = document.querySelectorAll('.logic-item');
+        items.forEach(item => {
+            item.classList.remove('answered');
+            
+            const gap = item.querySelector('.gap-tag');
+            gap.textContent = "?";
+            gap.classList.remove('filled-correct', 'filled-wrong');
+
+            const buttons = item.querySelectorAll('.choice-btn');
+            buttons.forEach(b => {
+                b.classList.remove('correct-btn', 'wrong-btn', 'disabled');
+                b.style.borderColor = "#ddd";
+                b.style.borderWidth = "2px";
+                b.style.color = "";
+                b.style.fontWeight = "";
+            });
+        });
+    }
+
+    function solveLogic() {
+        resetLogic();
+        const items = document.querySelectorAll('.logic-item');
+        items.forEach(item => {
+            const correctValue = item.getAttribute('data-correct');
+            const buttons = item.querySelectorAll('.choice-btn');
+            
+            // Suche den richtigen Button und klicke ihn virtuell
+            buttons.forEach(b => {
+                if (b.textContent === correctValue) {
+                    checkLogic(b, correctValue);
+                }
+            });
+        });
+    }
+</script>
+
+</body>
+</html>
