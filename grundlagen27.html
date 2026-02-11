@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russisch Grammatik: ТОЖЕ vs. ТАКЖЕ</title>
+    <!-- Polyfill für Touch-Geräte (Drag & Drop) -->
+    <script src="https://cdn.jsdelivr.net/npm/drag-drop-touch@1.3.1/DragDropTouch.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3 {
+            color: var(--secondary-color);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Introduction Section */
+        .intro-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .rule-box {
+            background-color: #ebf5fb;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .example {
+            font-style: italic;
+            color: #555;
+            margin-left: 20px;
+        }
+
+        /* Exercise Cards */
+        .exercise-card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .exercise-header {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .question-area {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            margin: 0 5px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background 0.3s;
+            color: white;
+        }
+
+        .btn-check { background-color: var(--primary-color); }
+        .btn-check:hover { background-color: #2980b9; }
+
+        .btn-reset { background-color: #95a5a6; }
+        .btn-reset:hover { background-color: #7f8c8d; }
+
+        .btn-solve { background-color: #f39c12; }
+        .btn-solve:hover { background-color: #d35400; }
+
+        /* Feedback Styling */
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            min-height: 24px;
+        }
+
+        .correct { color: var(--success-color); }
+        .incorrect { color: var(--error-color); }
+
+        .input-correct { border-color: var(--success-color) !important; background-color: #e8f8f5; }
+        .input-incorrect { border-color: var(--error-color) !important; background-color: #fdedec; }
+
+        /* Drag and Drop Styling */
+        .draggable-item {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: grab;
+            margin: 5px;
+            user-select: none;
+            box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+        }
+        
+        .draggable-item:active { cursor: grabbing; }
+
+        .drop-zone {
+            min-height: 60px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #fafafa;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .drop-zone.highlight {
+            border-color: var(--primary-color);
+            background-color: #eaf2f8;
+        }
+
+        /* Specific for Task 11 (Sorting) */
+        .sort-container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        .sort-box {
+            flex: 1;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .sort-target {
+            min-height: 100px;
+            border: 2px solid #ddd;
+            background: white;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .sort-container { flex-direction: column; }
+            .btn-group { flex-direction: column; }
+            button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Russisch Grammatik: ТОЖЕ vs. ТАКЖЕ</h1>
+
+    <!-- Einführung -->
+    <div class="intro-card">
+        <h2>Grundlagen: Der Unterschied</h2>
+        <p>Obwohl beide Wörter im Deutschen oft mit "auch" übersetzt werden, ist ihre Verwendung im Russischen logisch getrennt.</p>
+
+        <div class="rule-box">
+            <h3>1. ТОЖЕ (Vergleich)</h3>
+            <p>Wir verwenden <strong>тоже</strong>, wenn <strong>zwei verschiedene Subjekte</strong> die gleiche Handlung ausführen.</p>
+            <p><em>Formel: Subjekt 1 macht X. Subjekt 2 macht X <strong>тоже</strong>.</em></p>
+            <div class="example">Beispiel: Я работаю. Моя сестра <strong>тоже</strong> (работает). <br>(Ich arbeite. Meine Schwester auch.)</div>
+        </div>
+
+        <div class="rule-box">
+            <h3>2. ТАКЖЕ (Ergänzung / "Plus")</h3>
+            <p>Wir verwenden <strong>также</strong>, wenn <strong>ein Subjekt</strong> mehrere verschiedene Handlungen ausführt oder Eigenschaften hat. Es bedeutet "außerdem" oder "zudem".</p>
+            <p><em>Formel: Subjekt 1 macht X. <strong>Также</strong> macht Subjekt 1 Y.</em></p>
+            <div class="example">Beispiel: Мы знаем русский язык. <strong>Также</strong> мы говорим по-английски. <br>(Wir können Russisch. Außerdem sprechen wir Englisch.)</div>
+            <p><strong>Hinweis:</strong> Bei Aufzählungen nutzen wir oft <strong>а также</strong> (sowie).</p>
+        </div>
+    </div>
+
+    <!-- Übungen -->
+
+    <!-- Übung 1: Dropdown einfach -->
+    <div class="exercise-card" id="ex-1">
+        <div class="exercise-header">Aufgabe 1: Wähle das richtige Wort (Vergleich)</div>
+        <div class="question-area">
+            Анна любит читать. Игорь 
+            <select id="ex1-select">
+                <option value="">...</option>
+                <option value="тоже">тоже</option>
+                <option value="также">также</option>
+            </select> 
+            любит читать.
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx1()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx1()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx1()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex1-feedback"></div>
+    </div>
+
+    <!-- Übung 2: Dropdown Ergänzung -->
+    <div class="exercise-card" id="ex-2">
+        <div class="exercise-header">Aufgabe 2: Wähle das richtige Wort (Ergänzung)</div>
+        <div class="question-area">
+            Студенты изучают историю. 
+            <select id="ex2-select">
+                <option value="">...</option>
+                <option value="Тоже">Тоже</option>
+                <option value="Также">Также</option>
+            </select> 
+            они изучают литературу.
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx2()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx2()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx2()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex2-feedback"></div>
+    </div>
+
+    <!-- Übung 3: Radio Buttons -->
+    <div class="exercise-card" id="ex-3">
+        <div class="exercise-header">Aufgabe 3: Aufzählung (Liste)</div>
+        <div class="question-area">
+            <p>В магазине продаются овощи, фрукты, ______ напитки.</p>
+            <label><input type="radio" name="ex3" value="тоже"> тоже</label><br>
+            <label><input type="radio" name="ex3" value="а также"> а также</label>
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx3()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx3()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx3()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex3-feedback"></div>
+    </div>
+
+    <!-- Übung 4: Dropdown (Kurze Antwort) -->
+    <div class="exercise-card" id="ex-4">
+        <div class="exercise-header">Aufgabe 4: Die kurze Antwort "Ich auch"</div>
+        <div class="question-area">
+            <p>– Я иду домой. (Ich gehe nach Hause)</p>
+            <p>– Я 
+            <select id="ex4-select">
+                <option value="">...</option>
+                <option value="тоже">тоже</option>
+                <option value="также">также</option>
+            </select>
+            . (Ich auch)</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx4()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx4()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx4()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex4-feedback"></div>
+    </div>
+
+    <!-- Übung 5: Multiple Choice Kontext -->
+    <div class="exercise-card" id="ex-5">
+        <div class="exercise-header">Aufgabe 5: Welcher Satz ist grammatikalisch KORREKT?</div>
+        <div class="question-area">
+            <label style="display:block; margin-bottom:10px;">
+                <input type="radio" name="ex5" value="wrong">
+                Он купил машину. Тоже он купил гараж.
+            </label>
+            <label style="display:block;">
+                <input type="radio" name="ex5" value="correct">
+                Он купил машину. Также он купил гараж.
+            </label>
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx5()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx5()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx5()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex5-feedback"></div>
+    </div>
+
+    <!-- Übung 6: Multiple Dropdowns -->
+    <div class="exercise-card" id="ex-6">
+        <div class="exercise-header">Aufgabe 6: Fülle die Lücken (тоже / также)</div>
+        <div class="question-area">
+            <p>1. Вчера был дождь. Сегодня 
+            <select id="ex6-1-select">
+                <option value="">...</option>
+                <option value="тоже">тоже</option>
+                <option value="также">также</option>
+            </select>
+             дождь.</p>
+            <p>2. Мы пообедали, а 
+            <select id="ex6-2-select">
+                <option value="">...</option>
+                <option value="тоже">тоже</option>
+                <option value="также">также</option>
+            </select>
+             выпили кофе.</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx6()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx6()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx6()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex6-feedback"></div>
+    </div>
+
+    <!-- Übung 7: Drag & Drop Sorting -->
+    <div class="exercise-card" id="ex-7">
+        <div class="exercise-header">Aufgabe 7: Ordne zu – Welches Wort passt?</div>
+        <p>Ziehe die Sätze in die richtige Box.</p>
+        
+        <div class="sort-container">
+            <div class="sort-box">
+                <h4>Hier passt ТОЖЕ (Vergleich)</h4>
+                <div class="drop-zone sort-target" id="zone-tozhe" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+            <div class="sort-box">
+                <h4>Hier passt ТАКЖЕ (Ergänzung)</h4>
+                <div class="drop-zone sort-target" id="zone-takzhe" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+
+        <div class="drop-zone" id="source-ex7" style="margin-top: 20px; border: none; background: transparent;">
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="drag-7-1" data-target="zone-tozhe">Ты студент? Я ...</div>
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="drag-7-2" data-target="zone-takzhe">Она умная, а ... красивая.</div>
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="drag-7-3" data-target="zone-tozhe">В Москве зима. В Берлине ...</div>
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="drag-7-4" data-target="zone-takzhe">Фирма ищет юриста, а ... бухгалтера.</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx7()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx7()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx7()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex7-feedback"></div>
+    </div>
+
+    <!-- Übung 8: Dropdown -->
+    <div class="exercise-card" id="ex-8">
+        <div class="exercise-header">Aufgabe 8: Ort vs. Zusatz</div>
+        <div class="question-area">
+            В парке гуляют дети. В лесу 
+            <select id="ex8-select">
+                <option value="">...</option>
+                <option value="тоже">тоже</option>
+                <option value="также">также</option>
+            </select>
+            гуляют дети.
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx8()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx8()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx8()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex8-feedback"></div>
+    </div>
+
+    <!-- Übung 9: Dropdown (а также) -->
+    <div class="exercise-card" id="ex-9">
+        <div class="exercise-header">Aufgabe 9: Wähle die Phrase für Aufzählungen ("sowie")</div>
+        <div class="question-area">
+            На конференции были врачи, учителя, 
+            <select id="ex9-select">
+                <option value="">...</option>
+                <option value="тоже">тоже</option>
+                <option value="также">также</option>
+                <option value="а также">а также</option>
+            </select>
+             инженеры.
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx9()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx9()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx9()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex9-feedback"></div>
+    </div>
+
+    <!-- Übung 10: Drag & Drop Satzbau -->
+    <div class="exercise-card" id="ex-10">
+        <div class="exercise-header">Aufgabe 10: Baue den Satz (Ergänzung)</div>
+        <p>Bringe die Wörter in die richtige Reihenfolge.</p>
+        <div class="drop-zone" id="target-ex10" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="drop-zone" id="source-ex10" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <!-- Gemischte Reihenfolge -->
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="w10-5">художник.</div>
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="w10-1">Он</div>
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="w10-4">также</div>
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="w10-2">писатель,</div>
+            <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="w10-3">а</div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx10()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx10()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx10()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex10-feedback"></div>
+    </div>
+
+    <!-- Übung 11: Auswahl Verneinung -->
+    <div class="exercise-card" id="ex-11">
+        <div class="exercise-header">Aufgabe 11: Negation</div>
+        <div class="question-area">
+            <p>Я не знаю ответ. Виктор ______ не знает ответ.</p>
+            <select id="ex11-select">
+                <option value="">...</option>
+                <option value="тоже">тоже</option>
+                <option value="также">также</option>
+            </select>
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx11()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx11()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx11()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex11-feedback"></div>
+    </div>
+
+    <!-- Übung 12: Fehler finden -->
+    <div class="exercise-card" id="ex-12">
+        <div class="exercise-header">Aufgabe 12: Ist dieser Satz richtig?</div>
+        <div class="question-area">
+            <p><em>"Я люблю спорт. Тоже я люблю музыку."</em></p>
+            <label><input type="radio" name="ex12" value="yes"> Ja, richtig.</label><br>
+            <label><input type="radio" name="ex12" value="no"> Nein, falsch.</label>
+        </div>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkEx12()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetEx12()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveEx12()">Lösung anzeigen</button>
+        </div>
+        <div class="feedback" id="ex12-feedback"></div>
+    </div>
+
+</div>
+
+<script>
+    /* --- Allgemeine Hilfsfunktionen --- */
+    function setFeedback(elementId, text, isCorrect) {
+        const el = document.getElementById(elementId);
+        el.textContent = text;
+        el.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    }
+
+    function markInput(inputId, isCorrect) {
+        const el = document.getElementById(inputId);
+        if(isCorrect) {
+            el.classList.add('input-correct');
+            el.classList.remove('input-incorrect');
+        } else {
+            el.classList.add('input-incorrect');
+            el.classList.remove('input-correct');
+        }
+    }
+
+    function resetInputStyles(inputId) {
+        const el = document.getElementById(inputId);
+        el.classList.remove('input-correct', 'input-incorrect');
+        el.value = '';
+    }
+    
+    function resetSelect(selectId) {
+        const el = document.getElementById(selectId);
+        el.classList.remove('input-correct', 'input-incorrect');
+        el.selectedIndex = 0;
+    }
+
+    /* --- Drag and Drop Funktionen --- */
+    function allowDrop(ev) {
+        ev.preventDefault();
+        ev.currentTarget.classList.add('highlight');
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        // Remove highlight
+        const dropZones = document.querySelectorAll('.drop-zone');
+        dropZones.forEach(z => z.classList.remove('highlight'));
+
+        var data = ev.dataTransfer.getData("text");
+        var draggedElement = document.getElementById(data);
+        
+        // Prüfen, ob das Ziel eine gültige Dropzone ist
+        if (ev.target.classList.contains('drop-zone')) {
+            ev.target.appendChild(draggedElement);
+        } else if (ev.target.parentElement.classList.contains('drop-zone')) {
+            ev.target.parentElement.appendChild(draggedElement); // Falls auf ein anderes Item gedroppt wird
+        }
+    }
+    
+    // Reset Drag and Drop Listener für Highlight entfernung bei leave
+    document.addEventListener("dragleave", function(event) {
+        if (event.target.classList && event.target.classList.contains("drop-zone")) {
+            event.target.classList.remove("highlight");
+        }
+    });
+
+
+    /* --- Übung 1 --- */
+    function checkEx1() {
+        const val = document.getElementById('ex1-select').value;
+        const correct = val === 'тоже';
+        markInput('ex1-select', correct);
+        setFeedback('ex1-feedback', correct ? 'Richtig! Zwei Subjekte (Anna, Igor) machen das Gleiche.' : 'Falsch. Hier vergleichen wir zwei Personen.', correct);
+    }
+    function resetEx1() { resetSelect('ex1-select'); setFeedback('ex1-feedback', '', false); }
+    function solveEx1() { document.getElementById('ex1-select').value = 'тоже'; checkEx1(); }
+
+    /* --- Übung 2 --- */
+    function checkEx2() {
+        const val = document.getElementById('ex2-select').value;
+        const correct = val === 'Также';
+        markInput('ex2-select', correct);
+        setFeedback('ex2-feedback', correct ? 'Richtig! Ein Subjekt (Studenten), das eine weitere Sache macht.' : 'Falsch. Es ist dasselbe Subjekt, also eine Ergänzung.', correct);
+    }
+    function resetEx2() { resetSelect('ex2-select'); setFeedback('ex2-feedback', '', false); }
+    function solveEx2() { document.getElementById('ex2-select').value = 'Также'; checkEx2(); }
+
+    /* --- Übung 3 --- */
+    function checkEx3() {
+        const radios = document.getElementsByName('ex3');
+        let val = '';
+        for(let r of radios) if(r.checked) val = r.value;
+        const correct = val === 'а также';
+        setFeedback('ex3-feedback', correct ? 'Richtig! Bei Aufzählungen verwenden wir "а также".' : 'Leider nein. Dies ist eine Aufzählung.', correct);
+    }
+    function resetEx3() { 
+        document.getElementsByName('ex3').forEach(r => r.checked = false); 
+        setFeedback('ex3-feedback', '', false); 
+    }
+    function solveEx3() { 
+        document.getElementsByName('ex3').forEach(r => { if(r.value === 'а также') r.checked = true; }); 
+        checkEx3(); 
+    }
+
+    /* --- Übung 4 (NEU: Dropdown) --- */
+    function checkEx4() {
+        const val = document.getElementById('ex4-select').value;
+        const correct = val === 'тоже';
+        markInput('ex4-select', correct);
+        setFeedback('ex4-feedback', correct ? 'Richtig! "Я тоже" = Ich auch.' : 'Falsch. "Me too" heißt auf Russisch "Я тоже".', correct);
+    }
+    function resetEx4() { resetSelect('ex4-select'); setFeedback('ex4-feedback', '', false); }
+    function solveEx4() { document.getElementById('ex4-select').value = 'тоже'; checkEx4(); }
+
+    /* --- Übung 5 --- */
+    function checkEx5() {
+        const radios = document.getElementsByName('ex5');
+        let val = '';
+        for(let r of radios) if(r.checked) val = r.value;
+        const correct = val === 'correct';
+        setFeedback('ex5-feedback', correct ? 'Richtig! "Также" leitet die neue Information ein.' : 'Falsch. Man kann einen Satz nicht mit "Тоже" beginnen, um eine Ergänzung zu machen.', correct);
+    }
+    function resetEx5() { document.getElementsByName('ex5').forEach(r => r.checked = false); setFeedback('ex5-feedback', '', false); }
+    function solveEx5() { document.getElementsByName('ex5')[1].checked = true; checkEx5(); }
+
+    /* --- Übung 6 (NEU: Dropdowns) --- */
+    function checkEx6() {
+        const v1 = document.getElementById('ex6-1-select').value;
+        const v2 = document.getElementById('ex6-2-select').value;
+        
+        const c1 = v1 === 'тоже';
+        const c2 = v2 === 'также';
+        
+        markInput('ex6-1-select', c1);
+        markInput('ex6-2-select', c2);
+        
+        if(c1 && c2) setFeedback('ex6-feedback', 'Alles richtig!', true);
+        else setFeedback('ex6-feedback', 'Überprüfe deine Antworten noch einmal.', false);
+    }
+    function resetEx6() { resetSelect('ex6-1-select'); resetSelect('ex6-2-select'); setFeedback('ex6-feedback', '', false); }
+    function solveEx6() { 
+        document.getElementById('ex6-1-select').value = 'тоже';
+        document.getElementById('ex6-2-select').value = 'также';
+        checkEx6();
+    }
+
+    /* --- Übung 7 (Drag Drop Sort) --- */
+    function checkEx7() {
+        const zoneTozhe = document.getElementById('zone-tozhe');
+        const zoneTakzhe = document.getElementById('zone-takzhe');
+        let correctCount = 0;
+        let total = 4;
+
+        // Check Tozhe Zone
+        Array.from(zoneTozhe.children).forEach(el => {
+            if(el.getAttribute('data-target') === 'zone-tozhe') {
+                el.style.backgroundColor = '#e8f8f5';
+                el.style.borderColor = '#27ae60';
+                correctCount++;
+            } else {
+                el.style.backgroundColor = '#fdedec';
+                el.style.borderColor = '#c0392b';
+            }
+        });
+
+        // Check Takzhe Zone
+        Array.from(zoneTakzhe.children).forEach(el => {
+            if(el.getAttribute('data-target') === 'zone-takzhe') {
+                el.style.backgroundColor = '#e8f8f5';
+                el.style.borderColor = '#27ae60';
+                correctCount++;
+            } else {
+                el.style.backgroundColor = '#fdedec';
+                el.style.borderColor = '#c0392b';
+            }
+        });
+
+        if(correctCount === 4) setFeedback('ex7-feedback', 'Perfekt zugeordnet!', true);
+        else setFeedback('ex7-feedback', 'Einige Elemente sind falsch zugeordnet.', false);
+    }
+    
+    function resetEx7() {
+        const source = document.getElementById('source-ex7');
+        const items = document.querySelectorAll('#ex-7 .draggable-item');
+        items.forEach(item => {
+            source.appendChild(item);
+            item.style.backgroundColor = '#fff';
+            item.style.borderColor = '#ccc';
+        });
+        setFeedback('ex7-feedback', '', false);
+    }
+    
+    function solveEx7() {
+        const zoneTozhe = document.getElementById('zone-tozhe');
+        const zoneTakzhe = document.getElementById('zone-takzhe');
+        
+        zoneTozhe.appendChild(document.getElementById('drag-7-1'));
+        zoneTozhe.appendChild(document.getElementById('drag-7-3'));
+        zoneTakzhe.appendChild(document.getElementById('drag-7-2'));
+        zoneTakzhe.appendChild(document.getElementById('drag-7-4'));
+        checkEx7();
+    }
+
+    /* --- Übung 8 --- */
+    function checkEx8() {
+        const val = document.getElementById('ex8-select').value;
+        const correct = val === 'тоже';
+        markInput('ex8-select', correct);
+        setFeedback('ex8-feedback', correct ? 'Richtig! Ort 1 vs Ort 2 (gleiche Situation).' : 'Falsch. Hier werden zwei Orte verglichen.', correct);
+    }
+    function resetEx8() { resetSelect('ex8-select'); setFeedback('ex8-feedback', '', false); }
+    function solveEx8() { document.getElementById('ex8-select').value = 'тоже'; checkEx8(); }
+
+    /* --- Übung 9 (NEU: Dropdown) --- */
+    function checkEx9() {
+        const val = document.getElementById('ex9-select').value;
+        const correct = (val === 'а также');
+        markInput('ex9-select', correct);
+        setFeedback('ex9-feedback', correct ? 'Richtig!' : 'Falsch. Die Phrase heißt "а также".', correct);
+    }
+    function resetEx9() { resetSelect('ex9-select'); setFeedback('ex9-feedback', '', false); }
+    function solveEx9() { document.getElementById('ex9-select').value = 'а также'; checkEx9(); }
+
+    /* --- Übung 10 (Satzbau, durcheinander) --- */
+    function checkEx10() {
+        const target = document.getElementById('target-ex10');
+        const ids = Array.from(target.children).map(el => el.id);
+        const correctOrder = ['w10-1', 'w10-2', 'w10-3', 'w10-4', 'w10-5']; // Он писатель, а также художник.
+        
+        let isCorrect = (ids.length === 5) && ids.every((val, index) => val === correctOrder[index]);
+        
+        if(isCorrect) {
+            target.style.borderColor = '#27ae60';
+            setFeedback('ex10-feedback', 'Richtig! "Он писатель, а также художник."', true);
+        } else {
+            target.style.borderColor = '#c0392b';
+            setFeedback('ex10-feedback', 'Die Reihenfolge stimmt noch nicht.', false);
+        }
+    }
+
+    function resetEx10() {
+        const source = document.getElementById('source-ex10');
+        const ids = ['w10-5', 'w10-1', 'w10-4', 'w10-2', 'w10-3']; // Hardcoded scrambled order for reset
+        ids.forEach(id => source.appendChild(document.getElementById(id)));
+        document.getElementById('target-ex10').style.borderColor = '#bdc3c7';
+        setFeedback('ex10-feedback', '', false);
+    }
+
+    function solveEx10() {
+        const target = document.getElementById('target-ex10');
+        const ids = ['w10-1', 'w10-2', 'w10-3', 'w10-4', 'w10-5']; // Correct Order
+        ids.forEach(id => target.appendChild(document.getElementById(id)));
+        checkEx10();
+    }
+
+    /* --- Übung 11 --- */
+    function checkEx11() {
+        const val = document.getElementById('ex11-select').value;
+        const correct = val === 'тоже';
+        markInput('ex11-select', correct);
+        setFeedback('ex11-feedback', correct ? 'Richtig! Auch bei Verneinung gilt die Regel: Neues Subjekt = тоже.' : 'Falsch. Wir haben ein neues Subjekt (Viktor), das dasselbe tut (nicht wissen).', correct);
+    }
+    function resetEx11() { resetSelect('ex11-select'); setFeedback('ex11-feedback', '', false); }
+    function solveEx11() { document.getElementById('ex11-select').value = 'тоже'; checkEx11(); }
+
+    /* --- Übung 12 --- */
+    function checkEx12() {
+        const radios = document.getElementsByName('ex12');
+        let val = '';
+        for(let r of radios) if(r.checked) val = r.value;
+        const correct = val === 'no';
+        setFeedback('ex12-feedback', correct ? 'Richtig, der Satz ist falsch. Es ist EIN Subjekt, also muss man "также" (oder "а также") benutzen.' : 'Nein. Da es nur ein Subjekt ("Ich") gibt, ist "тоже" hier falsch.', correct);
+    }
+    function resetEx12() { document.getElementsByName('ex12').forEach(r => r.checked = false); setFeedback('ex12-feedback', '', false); }
+    function solveEx12() { document.getElementsByName('ex12')[1].checked = true; checkEx12(); }
+
+</script>
+
+</body>
+</html>
