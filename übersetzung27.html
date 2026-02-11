@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russisch Übung: Mediation</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --german-text: #555;
+            --context-text: #7f8c8d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 { text-align: center; color: var(--secondary-color); }
+
+        .exercise-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .exercise-header {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        /* Item Container */
+        .mediation-item {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .mediation-item:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* German Source Text */
+        .german-box {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+
+        /* Context & Russian Sentence */
+        .russian-area {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .context-clue {
+            display: block;
+            font-size: 0.9em;
+            color: var(--context-text);
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .russian-sentence {
+            font-size: 1.2em;
+            display: block;
+        }
+
+        .gap {
+            display: inline-block;
+            min-width: 60px;
+            border-bottom: 2px solid #aaa;
+            text-align: center;
+            color: transparent;
+            font-weight: bold;
+            padding: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        /* Gap States */
+        .gap.filled-correct {
+            border-bottom-color: var(--success-color);
+            color: var(--success-color);
+        }
+        .gap.filled-wrong {
+            border-bottom-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Selection Buttons */
+        .options-grid {
+            display: flex;
+            gap: 10px;
+        }
+
+        .option-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            background-color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: #bbb;
+            background-color: #f5f5f5;
+        }
+
+        /* Button States */
+        .option-btn.correct-choice {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .option-btn.wrong-choice {
+            background-color: var(--error-color);
+            border-color: var(--error-color);
+            color: white;
+            opacity: 0.7;
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        /* Feedback Text */
+        .feedback-text {
+            margin-top: 10px;
+            font-size: 0.9em;
+            font-weight: bold;
+            min-height: 1.2em;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .options-grid {
+                flex-direction: column;
+            }
+            .german-box {
+                font-size: 1em;
+            }
+        }
+
+        /* Action Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button.action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            color: white;
+            min-width: 150px;
+        }
+
+        .btn-reset { background-color: #95a5a6; }
+        .btn-reset:hover { background-color: #7f8c8d; }
+
+        .btn-solve { background-color: #f39c12; }
+        .btn-solve:hover { background-color: #d35400; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Russisch Grammatik</h1>
+
+    <div class="exercise-card">
+        <div class="exercise-header">
+            Übersetzungs-Wahl: "Auch" ist nicht gleich "Auch"
+            <div style="font-size: 0.85em; font-weight: normal; margin-top: 5px; color: #555;">
+                Schau dir den Kontext (die Situation) an und wähle die richtige russische Übersetzung.
+            </div>
+        </div>
+
+        <!-- 1 -->
+        <div class="mediation-item" data-correct="тоже">
+            <div class="german-box">„Er raucht auch.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Sie raucht.)</span>
+                <span class="russian-sentence">Он <span class="gap">...</span> курит.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'тоже')">тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'также')">также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 2 -->
+        <div class="mediation-item" data-correct="Также">
+            <div class="german-box">„Er raucht auch.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Er trinkt Alkohol.)</span>
+                <span class="russian-sentence"><span class="gap">...</span> он курит.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'Тоже')">Тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'Также')">Также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 3 -->
+        <div class="mediation-item" data-correct="тоже">
+            <div class="german-box">„Hier ist es auch schön.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Dort ist es schön.)</span>
+                <span class="russian-sentence">Здесь <span class="gap">...</span> красиво.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'тоже')">тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'также')">также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 4 -->
+        <div class="mediation-item" data-correct="Также">
+            <div class="german-box">„Wir schwimmen auch.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Wir laufen oft.)</span>
+                <span class="russian-sentence"><span class="gap">...</span> мы плаваем.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'Тоже')">Тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'Также')">Также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 5 -->
+        <div class="mediation-item" data-correct="тоже">
+            <div class="german-box">„Anna war auch dort.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Boris war dort.)</span>
+                <span class="russian-sentence">Анна <span class="gap">...</span> там была.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'тоже')">тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'также')">также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 6 -->
+        <div class="mediation-item" data-correct="а также">
+            <div class="german-box">„...und auch Wasser.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Er kaufte Brot, Käse...)</span>
+                <span class="russian-sentence">Он купил хлеб, сыр, <span class="gap">...</span> воду.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'тоже')">тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'а также')">а также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 7 -->
+        <div class="mediation-item" data-correct="тоже">
+            <div class="german-box">„Sie schläft auch nicht.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Er schläft nicht.)</span>
+                <span class="russian-sentence">Она <span class="gap">...</span> не спит.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'тоже')">тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'также')">также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 8 -->
+        <div class="mediation-item" data-correct="Также">
+            <div class="german-box">„Es ist auch billig.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Das Essen ist lecker.)</span>
+                <span class="russian-sentence"><span class="gap">...</span> это дёшево.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'Тоже')">Тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'Также')">Также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 9 -->
+        <div class="mediation-item" data-correct="тоже">
+            <div class="german-box">„Ich auch.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Ich habe Hunger.)</span>
+                <span class="russian-sentence">Я <span class="gap">...</span> .</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'тоже')">тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'также')">также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <!-- 10 -->
+        <div class="mediation-item" data-correct="а также">
+            <div class="german-box">„...sowie die Eltern.“</div>
+            <div class="russian-area">
+                <span class="context-clue">Kontext: (Die Schüler kamen...)</span>
+                <span class="russian-sentence">Пришли ученики, <span class="gap">...</span> родители.</span>
+            </div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMediation(this, 'тоже')">тоже</button>
+                <button class="option-btn" onclick="checkMediation(this, 'а также')">а также</button>
+            </div>
+            <div class="feedback-text"></div>
+        </div>
+
+        <div class="btn-group">
+            <button class="action-btn btn-reset" onclick="resetMediation()">Zurücksetzen</button>
+            <button class="action-btn btn-solve" onclick="solveMediation()">Lösungen anzeigen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkMediation(btn, userValue) {
+        const item = btn.closest('.mediation-item');
+        
+        // Verhindern, dass man mehrmals klickt
+        if (item.classList.contains('answered')) return;
+        
+        item.classList.add('answered');
+        const correctValue = item.getAttribute('data-correct');
+        const gap = item.querySelector('.gap');
+        const feedback = item.querySelector('.feedback-text');
+        const buttons = item.querySelectorAll('.option-btn');
+
+        // Gap Text füllen
+        gap.textContent = userValue;
+
+        if (userValue === correctValue) {
+            // Richtig
+            btn.classList.add('correct-choice');
+            gap.classList.add('filled-correct');
+            feedback.textContent = "Richtig!";
+            feedback.style.color = "var(--success-color)";
+        } else {
+            // Falsch
+            btn.classList.add('wrong-choice');
+            gap.classList.add('filled-wrong');
+            feedback.textContent = `Falsch. Richtige Antwort: ${correctValue}`;
+            feedback.style.color = "var(--error-color)";
+            
+            // Richtigen Button anzeigen
+            buttons.forEach(b => {
+                // Wir müssen den Textinhalt oder den onclick-Wert prüfen
+                if (b.textContent === correctValue) {
+                    b.style.borderColor = "var(--success-color)";
+                    b.style.borderWidth = "2px";
+                }
+            });
+        }
+
+        // Andere Buttons deaktivieren
+        buttons.forEach(b => {
+            if (b !== btn) b.classList.add('disabled');
+        });
+    }
+
+    function resetMediation() {
+        const items = document.querySelectorAll('.mediation-item');
+        items.forEach(item => {
+            item.classList.remove('answered');
+            
+            const gap = item.querySelector('.gap');
+            gap.textContent = "...";
+            gap.classList.remove('filled-correct', 'filled-wrong');
+
+            const feedback = item.querySelector('.feedback-text');
+            feedback.textContent = "";
+
+            const buttons = item.querySelectorAll('.option-btn');
+            buttons.forEach(b => {
+                b.classList.remove('correct-choice', 'wrong-choice', 'disabled');
+                b.style.borderColor = "#ddd";
+                b.style.borderWidth = "2px";
+            });
+        });
+    }
+
+    function solveMediation() {
+        resetMediation();
+        const items = document.querySelectorAll('.mediation-item');
+        items.forEach(item => {
+            const correctValue = item.getAttribute('data-correct');
+            const buttons = item.querySelectorAll('.option-btn');
+            
+            // Suche den richtigen Button und klicke ihn virtuell
+            buttons.forEach(b => {
+                if (b.textContent === correctValue) {
+                    checkMediation(b, correctValue);
+                }
+            });
+        });
+    }
+</script>
+
+</body>
+</html>
