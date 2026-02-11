@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russisch Übung: Lückentext (10 Beispiele)</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 { text-align: center; color: var(--secondary-color); }
+
+        /* Exercise Card */
+        .exercise-card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .exercise-header {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        /* Gap Fill List Styling */
+        .gap-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .gap-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap; /* Wichtig für Mobile: Umbruch erlauben */
+            gap: 10px;
+        }
+
+        .gap-item:hover {
+            background-color: #f0f4f8;
+        }
+
+        .gap-number {
+            font-weight: bold;
+            color: #999;
+            margin-right: 5px;
+            min-width: 25px;
+        }
+
+        .sentence-part {
+            font-size: 1.1em;
+            white-space: normal; /* Textumbruch erlauben */
+        }
+
+        /* Dropdown Styling */
+        select.gap-select {
+            font-size: 1em;
+            padding: 8px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s, background-color 0.3s;
+            max-width: 100%;
+        }
+
+        select.gap-select:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Feedback States */
+        select.gap-select.correct {
+            border-color: var(--success-color);
+            background-color: #e8f8f5;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        select.gap-select.wrong {
+            border-color: var(--error-color);
+            background-color: #fdedec;
+            color: var(--error-color);
+        }
+
+        .icon-feedback {
+            font-size: 1.2em;
+            margin-left: auto; /* Schiebt Icon nach rechts */
+            display: none; /* Standardmäßig versteckt */
+        }
+
+        /* Mobile Optimierung */
+        @media (max-width: 600px) {
+            .gap-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .icon-feedback {
+                margin-left: 0;
+                align-self: flex-end;
+            }
+            select.gap-select {
+                width: 100%; /* Volle Breite auf kleinen Handys */
+            }
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            color: white;
+            transition: background 0.2s;
+            flex: 1;
+            min-width: 140px;
+            max-width: 200px;
+        }
+
+        .btn-check { background-color: var(--primary-color); }
+        .btn-check:hover { background-color: #2980b9; }
+
+        .btn-reset { background-color: #95a5a6; }
+        .btn-reset:hover { background-color: #7f8c8d; }
+
+        .btn-solve { background-color: #f39c12; }
+        .btn-solve:hover { background-color: #d35400; }
+
+        #final-feedback {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+            min-height: 1.6em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Russisch Grammatik</h1>
+
+    <div class="exercise-card">
+        <div class="exercise-header">
+            Lückentext: тоже, также oder а также?
+            <div style="font-size: 0.85em; font-weight: normal; margin-top: 5px; color: #555;">
+                Wähle das passende Wort aus. Achte auf Aufzählungen ("sowie") und Groß-/Kleinschreibung!
+            </div>
+        </div>
+
+        <ul class="gap-list">
+            <!-- 1. Vergleich -->
+            <li class="gap-item">
+                <span class="gap-number">1.</span>
+                <span class="sentence-part">Иван работает в банке. Мария</span>
+                <select class="gap-select" data-correct="тоже">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="также">также</option>
+                    <option value="а также">а также</option>
+                </select>
+                <span class="sentence-part">работает в банке.</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 2. Aufzählung (Liste) -->
+            <li class="gap-item">
+                <span class="gap-number">2.</span>
+                <span class="sentence-part">На столе лежат ручки, карандаши,</span>
+                <select class="gap-select" data-correct="а также">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="также">также</option>
+                    <option value="а также">а также</option>
+                </select>
+                <span class="sentence-part">книги.</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 3. Ergänzung (gleiches Subjekt) -->
+            <li class="gap-item">
+                <span class="gap-number">3.</span>
+                <span class="sentence-part">Мы изучаем русский язык.</span>
+                <select class="gap-select" data-correct="Также">
+                    <option value="">...</option>
+                    <option value="Тоже">Тоже</option>
+                    <option value="Также">Также</option>
+                    <option value="А также">А также</option>
+                </select>
+                <span class="sentence-part">мы говорим по-немецки.</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 4. Vergleich (Negativ) -->
+            <li class="gap-item">
+                <span class="gap-number">4.</span>
+                <span class="sentence-part">Я не хочу спать. Ты</span>
+                <select class="gap-select" data-correct="тоже">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="также">также</option>
+                    <option value="а также">а также</option>
+                </select>
+                <span class="sentence-part">не хочешь спать?</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 5. Aufzählung (Personen) -->
+            <li class="gap-item">
+                <span class="gap-number">5.</span>
+                <span class="sentence-part">Мы пригласили друзей, коллег,</span>
+                <select class="gap-select" data-correct="а также">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="также">также</option>
+                    <option value="а также">а также</option>
+                </select>
+                <span class="sentence-part">соседей.</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 6. Kurzantwort -->
+            <li class="gap-item">
+                <span class="gap-number">6.</span>
+                <span class="sentence-part">– Я люблю пиццу! <br> – Я</span>
+                <select class="gap-select" data-correct="тоже">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="также">также</option>
+                    <option value="а также">а также</option>
+                </select>
+                <span class="sentence-part">.</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 7. Ergänzung (Mitte im Satz) -->
+            <li class="gap-item">
+                <span class="gap-number">7.</span>
+                <span class="sentence-part">Студенты писали тест.</span>
+                <select class="gap-select" data-correct="Также">
+                    <option value="">...</option>
+                    <option value="Тоже">Тоже</option>
+                    <option value="Также">Также</option>
+                    <option value="А также">А также</option>
+                </select>
+                <span class="sentence-part">они делали упражнения.</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 8. Vergleich (Ort) -->
+            <li class="gap-item">
+                <span class="gap-number">8.</span>
+                <span class="sentence-part">В Лондоне дождь. В Париже</span>
+                <select class="gap-select" data-correct="тоже">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="также">также</option>
+                    <option value="а также">а также</option>
+                </select>
+                <span class="sentence-part">идет дождь.</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 9. Ergänzung (Handlung) - NEU -->
+            <li class="gap-item">
+                <span class="gap-number">9.</span>
+                <span class="sentence-part">Директор подписал документ.</span>
+                <select class="gap-select" data-correct="Также">
+                    <option value="">...</option>
+                    <option value="Тоже">Тоже</option>
+                    <option value="Также">Также</option>
+                    <option value="А также">А также</option>
+                </select>
+                <span class="sentence-part">он позвонил партнёру.</span>
+                <span class="icon-feedback"></span>
+            </li>
+
+            <!-- 10. Aufzählung (Speisekarte) - NEU -->
+            <li class="gap-item">
+                <span class="gap-number">10.</span>
+                <span class="sentence-part">В меню есть суп, салат,</span>
+                <select class="gap-select" data-correct="а также">
+                    <option value="">...</option>
+                    <option value="тоже">тоже</option>
+                    <option value="также">также</option>
+                    <option value="а также">а также</option>
+                </select>
+                <span class="sentence-part">десерт.</span>
+                <span class="icon-feedback"></span>
+            </li>
+        </ul>
+
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkGapFill()">Überprüfen</button>
+            <button class="btn-reset" onclick="resetGapFill()">Zurücksetzen</button>
+            <button class="btn-solve" onclick="solveGapFill()">Lösung anzeigen</button>
+        </div>
+        <div id="final-feedback"></div>
+    </div>
+
+</div>
+
+<script>
+    function checkGapFill() {
+        const selects = document.querySelectorAll('.gap-select');
+        let correctCount = 0;
+        let allAnswered = true;
+
+        selects.forEach(select => {
+            const userValue = select.value;
+            const correctValue = select.getAttribute('data-correct');
+            const parent = select.closest('.gap-item');
+            const icon = parent.querySelector('.icon-feedback');
+
+            // Reset Styles
+            select.classList.remove('correct', 'wrong');
+            icon.style.display = 'none';
+            parent.style.borderLeftColor = 'transparent';
+
+            if (userValue === "") {
+                allAnswered = false;
+                return;
+            }
+
+            if (userValue === correctValue) {
+                select.classList.add('correct');
+                parent.style.borderLeftColor = 'var(--success-color)';
+                icon.textContent = '✅';
+                icon.style.display = 'inline';
+                icon.style.color = 'var(--success-color)';
+                correctCount++;
+            } else {
+                select.classList.add('wrong');
+                parent.style.borderLeftColor = 'var(--error-color)';
+                icon.textContent = '❌';
+                icon.style.display = 'inline';
+                icon.style.color = 'var(--error-color)';
+            }
+        });
+
+        const feedbackEl = document.getElementById('final-feedback');
+        
+        if (!allAnswered) {
+            feedbackEl.textContent = 'Bitte fülle alle Lücken aus.';
+            feedbackEl.style.color = '#e67e22';
+        } else if (correctCount === selects.length) {
+            feedbackEl.textContent = 'Fantastisch! Alle Lücken sind korrekt gefüllt.';
+            feedbackEl.style.color = 'var(--success-color)';
+        } else {
+            feedbackEl.textContent = `Du hast ${correctCount} von ${selects.length} richtig. Schau dir die roten Felder noch einmal an.`;
+            feedbackEl.style.color = 'var(--error-color)';
+        }
+    }
+
+    function resetGapFill() {
+        const selects = document.querySelectorAll('.gap-select');
+        selects.forEach(select => {
+            select.value = "";
+            select.classList.remove('correct', 'wrong');
+            const parent = select.closest('.gap-item');
+            parent.style.borderLeftColor = 'transparent';
+            const icon = parent.querySelector('.icon-feedback');
+            icon.style.display = 'none';
+        });
+        document.getElementById('final-feedback').textContent = '';
+    }
+
+    function solveGapFill() {
+        const selects = document.querySelectorAll('.gap-select');
+        selects.forEach(select => {
+            select.value = select.getAttribute('data-correct');
+        });
+        checkGapFill(); // Sofortiges Feedback triggern
+    }
+</script>
+
+</body>
+</html>
