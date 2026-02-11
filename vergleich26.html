@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russisch Übung: Rapid Choice</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --disabled-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 { text-align: center; color: var(--secondary-color); }
+
+        /* Exercise Card Styles */
+        .exercise-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .exercise-header {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        /* Rapid Choice Item Styles */
+        .rapid-item {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ccc;
+            transition: opacity 0.3s;
+        }
+
+        .rapid-item:last-child { border-bottom: none; }
+
+        /* Wenn erledigt, leicht ausgrauen um Fokus auf nächste zu lenken (optional) */
+        .rapid-item.answered {
+            opacity: 0.8; 
+        }
+
+        .sentence {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .gap {
+            display: inline-block;
+            min-width: 60px;
+            border-bottom: 2px solid #333;
+            text-align: center;
+            color: var(--primary-color);
+            font-weight: bold;
+            padding: 0 5px;
+        }
+
+        .choice-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Responsive: Untereinander auf Mobile, Nebeneinander auf Desktop */
+        @media (max-width: 600px) {
+            .choice-container {
+                flex-direction: column;
+            }
+        }
+
+        .choice-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background-color: white;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1em;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .choice-btn strong {
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .choice-btn span {
+            font-size: 0.85em;
+            color: #777;
+        }
+
+        /* Hover nur wenn noch nicht geklickt wurde */
+        .rapid-item:not(.answered) .choice-btn:hover {
+            border-color: var(--primary-color);
+            background-color: #f0f8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Feedback States */
+        .choice-btn.correct {
+            background-color: #d5f5e3;
+            border-color: var(--success-color);
+            color: var(--success-color);
+            cursor: default;
+        }
+        
+        .choice-btn.correct::after {
+            content: '✓';
+            font-size: 1.5em;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .choice-btn.wrong {
+            background-color: #fadbd8;
+            border-color: var(--error-color);
+            color: var(--error-color);
+            cursor: default;
+            opacity: 0.7;
+        }
+        
+        .choice-btn.wrong::after {
+            content: '✗';
+            font-size: 1.5em;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .choice-btn.disabled {
+            background-color: #f9f9f9;
+            border-color: #e0e0e0;
+            color: #aaa;
+            cursor: default;
+        }
+
+        /* Button Group Footer */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-size: 1em;
+            min-width: 150px;
+        }
+
+        .btn-reset { background-color: #7f8c8d; }
+        .btn-reset:hover { background-color: #616e6f; }
+
+        .btn-solve { background-color: #f39c12; }
+        .btn-solve:hover { background-color: #d35400; }
+
+        .feedback-message {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Russisch Grammatik</h1>
+
+    <div class="exercise-card" id="rapid-task">
+        <div class="exercise-header">
+            Rapid Choice: Vergleich oder Ergänzung?
+            <div style="font-size: 0.85em; font-weight: normal; margin-top: 5px; color: #666;">
+                Klicke auf den richtigen Button. Die Auswertung erfolgt sofort.
+            </div>
+        </div>
+
+        <!-- 1. Vergleich -->
+        <div class="rapid-item" data-correct="tozhe">
+            <div class="sentence">
+                1. Я читаю книгу. Мой брат <span class="gap">...</span> читает.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Ergänzung -->
+        <div class="rapid-item" data-correct="takzhe">
+            <div class="sentence">
+                2. Я читаю книгу. <span class="gap">...</span> я слушаю музыку.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Vergleich (Ort) -->
+        <div class="rapid-item" data-correct="tozhe">
+            <div class="sentence">
+                3. В Берлине холодно. В Мюнхене <span class="gap">...</span> холодно.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+        
+         <!-- 4. Liste / Aufzählung -->
+         <div class="rapid-item" data-correct="takzhe">
+            <div class="sentence">
+                4. Он купил хлеб, молоко, а <span class="gap">...</span> сыр.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Verneinung -->
+        <div class="rapid-item" data-correct="tozhe">
+            <div class="sentence">
+                5. Ты не знаешь ответ? Я <span class="gap">...</span> не знаю.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Gleiches Subjekt (Wir) -->
+        <div class="rapid-item" data-correct="takzhe">
+            <div class="sentence">
+                6. Мы гуляли в парке. <span class="gap">...</span> мы ходили в кино.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Kurze Antwort -->
+        <div class="rapid-item" data-correct="tozhe">
+            <div class="sentence">
+                7. – Я студент. <br> – Я <span class="gap">...</span> .
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Firma (Sowie) -->
+        <div class="rapid-item" data-correct="takzhe">
+            <div class="sentence">
+                8. Компания производит столы, а <span class="gap">...</span> стулья.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Objekte vergleichen -->
+        <div class="rapid-item" data-correct="tozhe">
+            <div class="sentence">
+                9. У меня есть собака. У неё <span class="gap">...</span> есть собака.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. Abstrakte Einleitung -->
+        <div class="rapid-item" data-correct="takzhe">
+            <div class="sentence">
+                10. Это очень важно. <span class="gap">...</span> это интересно.
+            </div>
+            <div class="choice-container">
+                <div class="choice-btn" onclick="checkAnswer(this, 'tozhe')">
+                    <strong>ТОЖЕ</strong>
+                    <span>Neues Subjekt (Vergleich)</span>
+                </div>
+                <div class="choice-btn" onclick="checkAnswer(this, 'takzhe')">
+                    <strong>ТАКЖЕ</strong>
+                    <span>Gleiches Subjekt (Ergänzung)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="btn-group">
+            <button class="action-btn btn-reset" onclick="resetAll()">Zurücksetzen</button>
+            <button class="action-btn btn-solve" onclick="solveAll()">Alle Lösungen anzeigen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkAnswer(btn, userChoice) {
+        // Parent Container finden
+        const item = btn.closest('.rapid-item');
+        
+        // Verhindern, dass man mehrmals klickt
+        if (item.classList.contains('answered')) return;
+
+        const correctChoice = item.getAttribute('data-correct');
+        const gap = item.querySelector('.gap');
+        const buttons = item.querySelectorAll('.choice-btn');
+
+        // Als beantwortet markieren
+        item.classList.add('answered');
+
+        // Richtige Antwort Text
+        const correctText = correctChoice === 'tozhe' ? 'тоже' : 'также';
+
+        if (userChoice === correctChoice) {
+            // Richtig
+            btn.classList.add('correct');
+            gap.textContent = correctText;
+            gap.style.color = 'var(--success-color)';
+            gap.style.borderColor = 'var(--success-color)';
+            
+            // Den anderen Button deaktivieren
+            buttons.forEach(b => {
+                if(b !== btn) b.classList.add('disabled');
+            });
+
+        } else {
+            // Falsch
+            btn.classList.add('wrong');
+            gap.textContent = correctText; // Wir zeigen die Lösung
+            gap.style.color = 'var(--error-color)';
+            gap.style.borderColor = 'var(--error-color)';
+
+            // Den eigentlich richtigen Button grün markieren (Lösungseffekt)
+            buttons.forEach(b => {
+                const val = b.getAttribute('onclick').includes("'tozhe'") ? 'tozhe' : 'takzhe';
+                if (val === correctChoice) {
+                    b.classList.add('correct');
+                }
+            });
+        }
+    }
+
+    function resetAll() {
+        const items = document.querySelectorAll('.rapid-item');
+        items.forEach(item => {
+            item.classList.remove('answered');
+            
+            // Gap zurücksetzen
+            const gap = item.querySelector('.gap');
+            gap.textContent = '...';
+            gap.style.color = '';
+            gap.style.borderColor = '';
+
+            // Buttons zurücksetzen
+            const buttons = item.querySelectorAll('.choice-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('correct', 'wrong', 'disabled');
+            });
+        });
+    }
+
+    function solveAll() {
+        // Erst alles resetten, um sauberen Stand zu haben
+        resetAll();
+
+        const items = document.querySelectorAll('.rapid-item');
+        items.forEach(item => {
+            const correctChoice = item.getAttribute('data-correct');
+            const buttons = item.querySelectorAll('.choice-btn');
+            
+            // Das System so tun lassen, als ob man das Richtige geklickt hätte
+            // Wir suchen den Button, der die richtige Funktion hat
+            buttons.forEach(btn => {
+                // Wir parsen den onclick string oder nutzen Logik
+                // Einfacher: Wir schauen, welcher Button zum 'correctChoice' gehört
+                const isTozheBtn = btn.querySelector('strong').textContent.includes('ТОЖЕ');
+                
+                if (correctChoice === 'tozhe' && isTozheBtn) {
+                    checkAnswer(btn, 'tozhe');
+                } else if (correctChoice === 'takzhe' && !isTozheBtn) {
+                    checkAnswer(btn, 'takzhe');
+                }
+            });
+        });
+    }
+</script>
+
+</body>
+</html>
